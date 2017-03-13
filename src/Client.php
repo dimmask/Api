@@ -59,6 +59,11 @@ class Client
         return $this->on(self::getInlineQueryEvent($action), self::getInlineQueryChecker());
     }
 
+    public function callbackQuery(Closure $action)
+    {
+        return $this->on(self::getCallbackQueryEvent($action), self::getCallbackQueryChecker());
+    }
+
     /**
      * Use this method to add an event.
      * If second closure will return true (or if you are passed null instead of closure), first one will be executed.
@@ -154,6 +159,20 @@ class Client
         };
     }
 
+    protected static function getCallbackQueryEvent(Closure $action)
+    {
+        return function (Update $update) use ($action) {
+            if (!$update->getCallbackQuery()) {
+                return true;
+            }
+
+            $reflectionAction = new ReflectionFunction($action);
+            $reflectionAction->invokeArgs([$update->getCallbackQuery()]);
+
+            return false;
+        };
+    }
+
     /**
      * Returns check function to handling the command.
      *
@@ -187,6 +206,17 @@ class Client
         };
     }
 
+    /**
+     * Returns check function to handling the callbcck queries.
+     *
+     * @return Closure
+     */
+    protected static function getCallbackQueryChecker()
+    {
+        return function (Update $update) {
+            return !is_null($update->getCallbackQuery());
+        };
+    }
 
     public function __call($name, array $arguments)
     {

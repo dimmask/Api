@@ -4,6 +4,7 @@ namespace TelegramBot\Api\Types;
 
 use TelegramBot\Api\BaseType;
 use TelegramBot\Api\TypeInterface;
+use TelegramBot\Api\Types\Inline\CallbackQuery;
 use TelegramBot\Api\Types\Inline\ChosenInlineResult;
 use TelegramBot\Api\Types\Inline\InlineQuery;
 
@@ -32,6 +33,7 @@ class Update extends BaseType implements TypeInterface
         'update_id' => true,
         'message' => Message::class,
         'inline_query' => InlineQuery::class,
+        'callback_query' => CallbackQuery::class,
         'chosen_inline_result' => ChosenInlineResult::class,
     ];
 
@@ -58,6 +60,13 @@ class Update extends BaseType implements TypeInterface
      * @var \TelegramBot\Api\Types\Inline\InlineQuery
      */
     protected $inlineQuery;
+
+    /**
+     * Optional. Callback query
+     *
+     * @var \TelegramBot\Api\Types\Inline\CallbackQuery
+     */
+    protected $callbackQuery;
 
     /**
      * Optional. The result of a inline query that was chosen by a user and sent to their chat partner
@@ -112,6 +121,22 @@ class Update extends BaseType implements TypeInterface
     public function setInlineQuery($inlineQuery)
     {
         $this->inlineQuery = $inlineQuery;
+    }
+
+    /**
+     * @return InlineQuery
+     */
+    public function getCallbackQuery()
+    {
+        return $this->callbackQuery;
+    }
+
+    /**
+     * @param InlineQuery $inlineQuery
+     */
+    public function setCallbackQuery(CallbackQuery $callbackQuery)
+    {
+        $this->callbackQuery = $callbackQuery;
     }
 
     /**
